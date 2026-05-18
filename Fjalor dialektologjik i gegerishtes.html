@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Fjalor Dialektologjik i Gegërishtes</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background-color:#f4f1ea;
+    margin:0;
+    padding:0;
+}
+
+.container{
+    width:80%;
+    max-width:700px;
+    margin:60px auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+    color:#4b2e2e;
+    margin-bottom:30px;
+}
+
+.search-box{
+    display:flex;
+    gap:10px;
+}
+
+input{
+    flex:1;
+    padding:12px;
+    font-size:16px;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+
+button{
+    padding:12px 20px;
+    background:#6b4f4f;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#523737;
+}
+
+.result{
+    margin-top:25px;
+    padding:20px;
+    background:#faf7f2;
+    border-radius:10px;
+    line-height:1.8;
+}
+
+.label{
+    font-weight:bold;
+    color:#4b2e2e;
+}
+
+.not-found{
+    color:red;
+    font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Fjalor Dialektologjik i Gegërishtes</h1>
+
+<div class="search-box">
+    <input type="text" id="fjala" placeholder="Shkruaj fjalën...">
+    <button onclick="kerkoFjalen()">Kërko</button>
+</div>
+
+<div class="result" id="rezultati">
+Shkruaj një fjalë për të parë kuptimin.
+</div>
+
+</div>
+
+<script>
+
+const fjalori = {
+
+"me ba":{
+dialekti:"Gegërisht",
+shpjegimi:"Për të bërë, për të kryer një veprim.",
+shembull:"Duhet me ba detyrat para se me dalë jashtë."
+},
+
+"tash":{
+dialekti:"Gegërisht",
+shpjegimi:"Tani, në këtë moment.",
+shembull:"Tash po fillon mësimi."
+},
+
+"mramë":{
+dialekti:"Gegërisht",
+shpjegimi:"Mbrëmje ose koha e vonë e ditës.",
+shembull:"Mramë kemi dalë me shoqni."
+},
+
+"marak":{
+dialekti:"Gegërisht",
+shpjegimi:"Merak, shqetësim ose dëshirë e madhe për diçka.",
+shembull:"Kam marak me ditë si përfundon kjo histori."
+},
+
+"tamël":{
+dialekti:"Gegërisht",
+shpjegimi:"Qumësht.",
+shembull:"Fëmija pi tamël çdo mëngjes."
+},
+
+"shka":{
+dialekti:"Gegërisht",
+shpjegimi:"Çfarë.",
+shembull:"Shka po bën aty?"
+},
+
+"muj":{
+dialekti:"Gegërisht",
+shpjegimi:"Mundem / jam në gjendje.",
+shembull:"Muj me ardhë nesër."
+},
+
+"hup":{
+dialekti:"Gegërisht",
+shpjegimi:"Humb, nuk e gjen më diçka.",
+shembull:"E kam hup librin."
+},
+
+"tuj":{
+dialekti:"Gegërisht",
+shpjegimi:"Duke.",
+shembull:"Jam tuj mësu për provim."
+},
+
+"qit":{
+dialekti:"Gegërisht",
+shpjegimi:"Vendos ose nxjerr diçka.",
+shembull:"Qite librin në tavolinë."
+},
+
+"piskamë":{
+dialekti:"Gegërisht",
+shpjegimi:"Britmë e fortë, e bërtitur.",
+shembull:"U dëgjua një piskamë në rrugë."
+},
+
+"shllungë":{
+dialekti:"Gegërisht",
+shpjegimi:"Masë e madhe e ujit ose baltës.",
+shembull:"Rruga u mbush me shllungë pas shiut."
+},
+
+"bajrak":{
+dialekti:"Gegërisht",
+shpjegimi:"Flamur që përfaqëson një zonë ose krahinë.",
+shembull:"Në luftë, bajraku valvitej përpara ushtrisë."
+},
+
+"thi":{
+dialekti:"Gegërisht",
+shpjegimi:"Derr.",
+shembull:"Në fshat kanë një thi të madh."
+},
+
+"tlyn":{
+dialekti:"Gegërisht",
+shpjegimi:"Gjalpë.",
+shembull:"Bukën e lyen me tlyn të freskët."
+},
+
+"krye":{
+dialekti:"Gegërisht",
+shpjegimi:"Kokë.",
+shembull:"Po më dhemb shumë kryet."
+},
+
+"rrno":{
+dialekti:"Gegërisht",
+shpjegimi:"Jetoj.",
+shembull:"Rrno gjatë dhe shëndetshëm!"
+},
+
+"tutë":{
+dialekti:"Gegërisht",
+shpjegimi:"Frikë.",
+shembull:"Kam tutë me dalë vetëm natën."
+},
+
+"nadjamirë":{
+dialekti:"Gegërisht",
+shpjegimi:"Mirëmëngjes.",
+shembull:"Nadja e mirë, si je sot?"
+},
+
+"gja":{
+dialekti:"Gegërisht",
+shpjegimi:"Gjë / diçka.",
+shembull:"S’kam gja për të thënë."
+},
+
+"m'shel":{
+dialekti:"Gegërisht",
+shpjegimi:"Mbyll.",
+shembull:"M’shele derën."
+},
+
+"kacagjel":{
+dialekti:"Gegërisht",
+shpjegimi:"Njeri i hollë dhe i gjatë.",
+shembull:"Ai asht kacagjel i gjatë."
+},
+
+"marre":{
+dialekti:"Gegërisht",
+shpjegimi:"Turp.",
+shembull:"Asht marre me vepru ashtu."
+},
+
+"kah":{
+dialekti:"Gegërisht",
+shpjegimi:"Nga.",
+shembull:"Kah po shkon?"
+},
+
+"sod":{
+dialekti:"Gegërisht",
+shpjegimi:"Sot.",
+shembull:"Sod është ditë e mirë."
+},
+
+"gjalë":{
+dialekti:"Gegërisht",
+shpjegimi:"Djalë.",
+shembull:"Asht gjalë i ri."
+},
+
+"cucë":{
+dialekti:"Gegërisht",
+shpjegimi:"Vajzë.",
+shembull:"Asht cucë e mirë."
+},
+
+"krane":{
+dialekti:"Gegërisht",
+shpjegimi:"Thupër ose shkop i hollë druri.",
+shembull:"Ka shkue me mbledhë krane."
+},
+
+"setër":{
+dialekti:"Gegërisht",
+shpjegimi:"Xhaketë.",
+shembull:"Ka vesh setrën e re."
+},
+
+"tesha":{
+dialekti:"Gegërisht",
+shpjegimi:"Rroba.",
+shembull:"Kam ble tesha të reja."
+},
+
+"ftue":{
+dialekti:"Gegërisht",
+shpjegimi:"Ftua.",
+shembull:"Nana m’ka sjellë nji ftue t’pjekun."
+},
+
+"nand":{
+dialekti:"Gegërisht",
+shpjegimi:"Nëntë.",
+shembull:"Ora asht nand."
+},
+
+"emën":{
+dialekti:"Gegërisht",
+shpjegimi:"Emër.",
+shembull:"Emni i tij asht i veçantë."
+},
+
+"votër":{
+dialekti:"Gegërisht",
+shpjegimi:"Vatër.",
+shembull:"Familja u mblodh rreth votrës."
+},
+
+"vên":{
+dialekti:"Gegërisht",
+shpjegimi:"Vend.",
+shembull:"Ky asht vên i mirë për me ndejt."
+},
+
+"â":{
+dialekti:"Gegërisht",
+shpjegimi:"Është.",
+shembull:"Ky â libri jem."
+},
+
+"kojshi":{
+dialekti:"Gegërisht",
+shpjegimi:"Fqinj.",
+shembull:"Kojshia jonë asht shumë e mirë."
+},
+
+"çajre":{
+dialekti:"Gegërisht",
+shpjegimi:"Zgjidhje për një situatë.",
+shembull:"S’po gjej çajre për këtë problem."
+},
+
+"gajle":{
+dialekti:"Gegërisht",
+shpjegimi:"Hall ose shqetësim.",
+shembull:"Mos ki gajle për atë punë."
+},
+
+"fëltere":{
+dialekti:"Gegërisht",
+shpjegimi:"Tigan për gatim.",
+shembull:"E vuni bukën në fëltere me e skuq."
+},
+
+"(me) tamin":{
+dialekti:"Gegërisht",
+shpjegimi:"Me hamendje.",
+shembull:"Ja hodha me tamin ingredientët."
+},
+
+"kallamoq":{
+dialekti:"Gegërisht",
+shpjegimi:"Misër.",
+shembull:"Në katund mbjellin shumë kallamoq."
+},
+
+"kusi":{
+dialekti:"Gegërisht",
+shpjegimi:"Tenxhere.",
+shembull:"Uji po zien në kusi."
+},
+
+"mic":{
+dialekti:"Gegërisht",
+shpjegimi:"Mace.",
+shembull:"Ajo kishte nji mic t’vogël në shpi."
+},
+
+"shis":{
+dialekti:"Gegërisht",
+shpjegimi:"Fshesë.",
+shembull:"Merre shisin e pastro oborrin."
+},
+
+"sokak":{
+dialekti:"Gegërisht",
+shpjegimi:"Oborr ose rrugicë e ngushtë.",
+shembull:"Fëmijët po lozin në sokak."
+},
+
+"kërtolla":{
+dialekti:"Gegërisht",
+shpjegimi:"Patate.",
+shembull:"Nana po zien kërtolla për darkë."
+},
+
+"patlixhan":{
+dialekti:"Gegërisht",
+shpjegimi:"Domate.",
+shembull:"Nana bani sallatë me patlixhana të freskët."
+},
+
+"partagal":{
+dialekti:"Gegërisht",
+shpjegimi:"Portokall.",
+shembull:"Baba kish ble partagal të amël."
+},
+
+"rrencak":{
+dialekti:"Gegërisht",
+shpjegimi:"Gënjeshtar.",
+shembull:"Mos i beso atij se asht rrencak."
+}
+
+};
+
+function kerkoFjalen(){
+
+let fjala = document.getElementById("fjala").value.toLowerCase().trim();
+
+let rezultati = document.getElementById("rezultati");
+
+if(fjalori[fjala]){
+
+let info = fjalori[fjala];
+
+rezultati.innerHTML = `
+<p><span class="label">Fjala:</span> ${fjala}</p>
+<p><span class="label">Dialekti:</span> ${info.dialekti}</p>
+<p><span class="label">Shpjegimi:</span> ${info.shpjegimi}</p>
+<p><span class="label">Shembull:</span> "${info.shembull}"</p>
+`;
+
+}else{
+
+rezultati.innerHTML = `
+<p class="not-found">Fjala nuk u gjend!</p>
+`;
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
